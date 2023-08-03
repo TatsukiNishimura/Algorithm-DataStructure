@@ -4,6 +4,9 @@
 
 任意の節 x について、左部分木に含まれる要素は x の要素より小さく、右部分木に含まれる要素は x の要素より大きいという条件を満たす木
 
+最良: O(logn)
+最悪: O(n)
+
 ## 実現
 
 ```
@@ -125,6 +128,22 @@ int delete(KEY key)
         }
     }
     return 0;
+}
+```
+
+## deletemin
+
+```cpp
+NODE *deletemin(NODE **p)
+{
+    NODE *x;
+    while((*p)->left != NULL)
+    {
+        p = &((*p)->left);
+    }
+    x = *p;
+    *p = (*p)->right;
+    return x;
 }
 ```
 
