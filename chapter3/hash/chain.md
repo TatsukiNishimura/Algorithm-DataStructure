@@ -51,3 +51,89 @@ N に対して、B が十分に大きい場合、O(N/B) は O(1) とみなせる
 つまり、探索にかかる時間は一定時間とみなせなくなるから、
 
 <strong>チェイン法では高速性を担保するためには十分なバケット数を確保する必要がある。</strong>
+
+# チェイン法の実装
+
+## 構造体
+
+```c++
+typedef struct cell
+{
+    KEY key;
+    DATA data;
+    struct cell *next;
+}CELL;
+```
+
+## 探索
+
+```c++
+DATA* find(KEY key)
+{
+    CELL *p;
+    for (p = table[hash(key)]; p != NULL; p = p->next) {
+        if (keyequal(p->key, key) == 0) {
+            return &p->data;
+        }
+    }
+}
+
+```
+
+## 挿入
+
+```c++
+int insert(KEY key, DATA data)
+{
+    CELL *p;
+    int h;
+
+    if(find(key) != NULL)
+    {
+        return 0;
+    }
+
+    if ((p = (CELL*)malloc(sizeof(CELL))) == NULL) {
+        printf("メモリ不足\n");
+    }
+    h = hash(key);
+    p->key = key;
+    p->data = data;
+    p->next = table[h];
+    table[h] = p;
+    return 1;
+}
+
+```
+
+## 削除
+
+```c++
+int delete(KEY key)
+{
+    CELL *p, *q;
+    int h;
+
+    h = hash(key);
+    // パケットが空の場合
+    if (table[h] == NULL) {
+        return 0;
+    }
+    // 先頭の場合
+    if (keyequal(table[h]->key, key) == 0) {
+        p = table[h];
+        table[h] = p->next;
+        free(p);
+        return 1;
+    }
+    // それ以外
+    for (q = table[h], p = q->next; p != NULL; q = p, p = p->next) {
+        if (keyequal(p->key, key) == 0) {
+            q->next = p->next;
+            free(p);
+            return 1;
+        }
+    }
+    return 0;
+}
+```
