@@ -138,6 +138,7 @@ void merge_sort_array(int a[], int low, int high)
         b[i] = a[j];
     i = low;
     j = high;
+    // 作業用配列Bの両端から取り出したデータをマージして配列Aに格納
     for(k = low;k <= high;k++)
     {
         if(b[i] <= b[j])
