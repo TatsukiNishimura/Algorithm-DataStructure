@@ -149,6 +149,70 @@ void merge_sort_array(int a[], int low, int high)
 }
 ```
 
-```
+## 連結リスト版マージソート
+
+```cpp
+struct node {
+    int value;
+    struct node *next;
+}
+
+struct node *merge_list(struct node* a, struct node* b)
+{
+    struct node head, *p;
+    p = &head;
+
+    while(a != NULL && b != NULL)
+    {
+        if(a->value <= b->value)
+        {
+            p->next = a;
+            a = a->next;
+        }
+        else
+        {
+            p->next = b;
+            b = b->next;
+        }
+        p = p->next;
+    }
+
+    if(a == NULL)
+    {
+        p->next = b;
+    }
+    else
+    {
+        p->next = a;
+    }
+
+    return head.next;
+}
+
+struct node* merge_sort_list(struct node* x)
+{
+    struct node* a, *b, *p;
+    if(x == NULL || x->next == NULL)
+        return x;
+
+    a = x;
+    b = x->next;
+    if(b != NULL)
+        b = b->next;
+    while(b != NULL)
+    {
+        a = a->next;
+        b = b->next;
+        if(b != NULL)
+            b = b->next;
+    }
+    // 半分に切断
+    p = a->next;
+    a->next = NULL;
+    return merge_list(merge_sort_list(x), merge_sort_list(p));
+}
+
 
 ```
+
+## ヒープソート
