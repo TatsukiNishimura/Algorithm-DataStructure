@@ -41,13 +41,9 @@ DATA *find(KEY key)
 
     for (p = table[hash(key)]; p != NULL; p = p->next)
     {
-        CELL *p;
-        for (p = table[hash(key)]; p != NULL; p = p->next)
+        if (keyequal(key, p->key))
         {
-            if (keyequal(key, p->key))
-            {
-                return &p->data;
-            }
+            return &p->data;
         }
     }
     return NULL;
